@@ -1,0 +1,21 @@
+{
+    "width": 9,
+    "height": 4,
+    "moves": 30,
+    "additionalTilesOnFall": [
+        { "col": 3, "array": [{"code": 22}, {"code": 22}, {"code": 22}] },
+        { "col": 4, "array": [{"code": 10}] }
+    ],
+    "board": {
+        "froze": [
+            2, 0, 0, 1, 0, 0, 0, 0, 0,
+            2, 0, 0, 1, 0, 0, 0, 0, 2
+        ],
+        "data": [
+            {"code": 22}, {"code": 13}, {"code": 10}, {"code": 10}, {"code": 18}, {"code": 10}, {"code": 10}, {"code": -2}, {"code": -2},
+            {"code": 211}, {"code": 14}, {"code": 13}, {"code": 12}, {"code": 17}, {"code": 12}, {"code": 12}, {"code": -2}, {"code": 10},
+            {"code": 211}, {"code": 12}, {"code": 14}, {"code": 159}, {"code": 159}, {"code": 159}, {"code": 12}, {"code": 14}, {"code": 10},
+            {"code": 23, "dir": "right", "val": 2}, {"code": -1}, {"code": -1}, {"code": 159}, {"code": 158}, {"code": 159}, {"code": 159}, {"code": 10}, {"code": 10}
+        ]
+    }
+}
