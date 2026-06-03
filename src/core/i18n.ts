@@ -4,35 +4,38 @@ export const locales = {
             menuTitle: 'ВЫБОР УРОВНЯ',
             menuStars: 'Звезды: {current} / {total}',
             gameMoves: 'Ходы:',
-            gameScore: 'Счет:'
+            gameScore: 'Счет:',
         },
         styles: {
             // Для поддержки разных языков в будущем можно подгружать разные шрифты
-            fontFamily: 'Arial, sans-serif', 
+            fontFamily: 'Arial, sans-serif',
             titleFontSize: 32,
-            uiFontSize: 24
-        }
+            uiFontSize: 24,
+        },
     },
     en: {
         texts: {
             menuTitle: 'SELECT LEVEL',
             menuStars: 'Stars: {current} / {total}',
             gameMoves: 'Moves:',
-            gameScore: 'Score:'
+            gameScore: 'Score:',
         },
         styles: {
             fontFamily: 'Arial, sans-serif',
             titleFontSize: 32,
-            uiFontSize: 24
-        }
-    }
+            uiFontSize: 24,
+        },
+    },
 };
 
 // По умолчанию ставим русский
-export let currentLocale = locales.ru;
+export const currentLocale = locales.ru;
 
 // Простая функция перевода с поддержкой параметров
-export function t(key: keyof typeof currentLocale.texts, params?: Record<string, string | number>): string {
+export function t(
+    key: keyof typeof currentLocale.texts,
+    params?: Record<string, string | number>
+): string {
     let text = currentLocale.texts[key];
     if (params) {
         for (const [pKey, pVal] of Object.entries(params)) {

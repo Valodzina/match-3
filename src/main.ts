@@ -18,7 +18,7 @@ async function bootstrap() {
 
     // Инициализируем менеджер сцен
     SceneManager.init(app);
-    
+
     // Переходим на сцену меню
     SceneManager.changeScene(new MenuScene());
 }
