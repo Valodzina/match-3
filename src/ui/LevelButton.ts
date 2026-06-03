@@ -12,8 +12,8 @@ export interface LevelConfig {
 
 export class LevelButton extends Container {
     // Внутренний контейнер для независимых анимаций нажатия
-    private view = new Container(); 
-    
+    private view = new Container();
+
     private bg = new Graphics();
     private numberText!: Text;
     private stateContainer = new Container();
@@ -46,9 +46,7 @@ export class LevelButton extends Container {
 
     private drawBackground(): void {
         const color = this.config.state === 'locked' ? 0x555555 : 0x4a90e2;
-        this.bg.clear()
-            .roundRect(0, 0, LevelButton.SIZE, LevelButton.SIZE, 20)
-            .fill({ color });
+        this.bg.clear().roundRect(0, 0, LevelButton.SIZE, LevelButton.SIZE, 20).fill({ color });
     }
 
     private drawNumber(): void {
@@ -58,13 +56,13 @@ export class LevelButton extends Container {
                 fontFamily: 'Arial',
                 fontSize: 36,
                 fill: '#ffffff',
-                fontWeight: 'bold'
-            }
+                fontWeight: 'bold',
+            },
         });
 
         this.numberText.x = (LevelButton.SIZE - this.numberText.width) / 2;
         this.numberText.y = (LevelButton.SIZE - this.numberText.height) / 2 - 10;
-        
+
         this.view.addChild(this.numberText);
     }
 
@@ -73,8 +71,9 @@ export class LevelButton extends Container {
         this.stateContainer.addChild(graphics);
 
         if (this.config.state === 'locked') {
-            graphics.roundRect((LevelButton.SIZE - 30) / 2, (LevelButton.SIZE - 30) / 2, 30, 30, 5)
-                    .fill({ color: 0x333333 });
+            graphics
+                .roundRect((LevelButton.SIZE - 30) / 2, (LevelButton.SIZE - 30) / 2, 30, 30, 5)
+                .fill({ color: 0x333333 });
         } else if (this.config.state === 'completed') {
             const starRadius = 8;
             const gap = 15;
@@ -85,8 +84,7 @@ export class LevelButton extends Container {
                 const color = i < this.config.stars ? 0xffd700 : 0x000000;
                 const alpha = i < this.config.stars ? 1 : 0.3;
 
-                graphics.circle(startX + i * gap, y, starRadius)
-                        .fill({ color, alpha });
+                graphics.circle(startX + i * gap, y, starRadius).fill({ color, alpha });
             }
         }
     }
@@ -102,7 +100,7 @@ export class LevelButton extends Container {
             this.pointerDownX = e.global.x;
             this.pointerDownY = e.global.y;
 
-            // Анимируем только внутренний view. 
+            // Анимируем только внутренний view.
             // Внешний scale, которым управляет MenuScene, остается нетронутым!
             this.view.alpha = 0.8;
             this.view.scale.set(0.9);
@@ -122,7 +120,7 @@ export class LevelButton extends Container {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             // Если смещение меньше 10 пикселей, считаем это кликом (защита от дрожания пальца)
-         if (distance < 10) {
+            if (distance < 10) {
                 SceneManager.changeScene(new GameScene(this.config.levelNumber));
             }
         });

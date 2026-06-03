@@ -5,29 +5,28 @@ import { MenuScene } from './MenuScene';
 import { currentLocale, t } from '../core/i18n';
 
 export class GameScene extends BaseScene {
-    
     private levelId: number;
     private headerContainer = new Container();
     private boardContainer = new Container(); // Изолированный контейнер для механики Match-3
-    
+
     private background = new Graphics();
     private boardBackground = new Graphics();
-    
+
     private movesText!: Text;
     private scoreText!: Text;
     private backButton = new Container();
 
     constructor(levelId: number) {
         super();
-        
+
         this.levelId = levelId;
         // 1. Слой фона
         this.addChild(this.background);
-        
+
         // 2. Слой игрового поля
         this.addChild(this.boardContainer);
         this.boardContainer.addChild(this.boardBackground);
-        
+
         // 3. Слой UI поверх всего
         this.addChild(this.headerContainer);
 
@@ -36,11 +35,11 @@ export class GameScene extends BaseScene {
     }
 
     private initUI(): void {
-        const textStyle = { 
-            fontFamily: currentLocale.styles.fontFamily, 
-            fontSize: currentLocale.styles.uiFontSize, 
+        const textStyle = {
+            fontFamily: currentLocale.styles.fontFamily,
+            fontSize: currentLocale.styles.uiFontSize,
             fill: '#ffffff',
-            fontWeight: 'bold' as const
+            fontWeight: 'bold' as const,
         };
 
         this.movesText = new Text({ text: t('gameMoves') + ' 25', style: textStyle });
@@ -54,19 +53,22 @@ export class GameScene extends BaseScene {
 
     private createBackButton(): void {
         const btnBg = new Graphics().roundRect(0, 0, 60, 40, 10).fill({ color: 0xe74c3c });
-        const btnText = new Text({ text: '←', style: { fill: '#ffffff', fontSize: 24, fontWeight: 'bold' } });
-        
+        const btnText = new Text({
+            text: '←',
+            style: { fill: '#ffffff', fontSize: 24, fontWeight: 'bold' },
+        });
+
         btnText.position.set((60 - btnText.width) / 2, (40 - btnText.height) / 2);
-        
+
         this.backButton.addChild(btnBg, btnText);
         this.backButton.eventMode = 'static';
         this.backButton.cursor = 'pointer';
-        
+
         // Возврат в меню
         this.backButton.on('pointerup', () => {
             SceneManager.changeScene(new MenuScene());
         });
-        
+
         this.headerContainer.addChild(this.backButton);
     }
 
@@ -77,7 +79,7 @@ export class GameScene extends BaseScene {
 
     public resize(width: number, height: number): void {
         const padding = 20;
-        
+
         // Фон на весь экран
         this.background.clear().rect(0, 0, width, height).fill({ color: 0x1a1a2e });
 
@@ -87,21 +89,23 @@ export class GameScene extends BaseScene {
         this.scoreText.position.set(width - this.scoreText.width - padding, padding);
 
         // Вычисляем, где заканчивается интерфейс
-        const headerBottom = Math.max(
-            this.backButton.y + this.backButton.height, 
-            this.movesText.y + this.movesText.height
-        ) + padding;
+        const headerBottom =
+            Math.max(
+                this.backButton.y + this.backButton.height,
+                this.movesText.y + this.movesText.height
+            ) + padding;
 
         // --- 2. Рассчитываем коробку для игрового поля ---
         // Сколько места осталось под полем (от хедера до низа экрана)
         const availableWidth = width - padding * 2;
         const availableHeight = height - headerBottom - padding * 2;
-        
+
         // Для начала сделаем поле строго квадратным (по наименьшей доступной стороне)
         const boardSize = Math.min(availableWidth, availableHeight);
 
         // Рисуем подложку, чтобы визуально видеть границы нашего поля
-        this.boardBackground.clear()
+        this.boardBackground
+            .clear()
             .roundRect(0, 0, boardSize, boardSize, 20)
             .fill({ color: 0x2e2e4f, alpha: 0.8 });
 
@@ -110,8 +114,8 @@ export class GameScene extends BaseScene {
         this.boardContainer.y = headerBottom + (availableHeight - boardSize) / 2;
     }
 
-   public destroy(): void {
+    public destroy(): void {
         // 3. Вызываем destroy у родительского Container
-        super.destroy({ children: true }); 
+        super.destroy({ children: true });
     }
 }

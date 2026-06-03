@@ -1,4 +1,4 @@
-import { Container, Graphics, Text, Rectangle } from 'pixi.js';
+import { Container, Graphics, Text, Rectangle, FederatedPointerEvent } from 'pixi.js';
 import { BaseScene } from './BaseScene';
 import { LevelButton, type LevelState } from '../ui/LevelButton'; // <-- Правильный импорт
 import { currentLocale, t } from '../core/i18n'; // <-- Импорт локализации
@@ -9,8 +9,8 @@ export class MenuScene extends BaseScene {
     private uiContainer = new Container();
     private scrollMask = new Graphics();
     private headerText!: Text;
-    private starsText!: Text; // <-- Добавляем текст для счетчика звезд
-    
+    private starsText!: Text;
+
     // Статистика
     private totalLevels = 50;
     private currentStarsCount = 0;
@@ -21,7 +21,7 @@ export class MenuScene extends BaseScene {
     private containerStartY = 0;
     private velocityY = 0;
     private lastPointerY = 0;
-    
+
     private minScrollY = 0;
     private maxScrollY = 0;
     private headerHeight = 100;
@@ -36,16 +36,16 @@ export class MenuScene extends BaseScene {
         this.initUI(); // <-- Вызываем только его
         this.initScrollEvents();
     }
-private initUI(): void {
+    private initUI(): void {
         // Заголовок из локализации
         this.headerText = new Text({
             text: t('menuTitle'),
-            style: { 
-                fontFamily: currentLocale.styles.fontFamily, 
-                fontSize: currentLocale.styles.titleFontSize, 
-                fill: '#ffffff', 
-                fontWeight: 'bold' 
-            }
+            style: {
+                fontFamily: currentLocale.styles.fontFamily,
+                fontSize: currentLocale.styles.titleFontSize,
+                fill: '#ffffff',
+                fontWeight: 'bold',
+            },
         });
         this.uiContainer.addChild(this.headerText);
 
@@ -57,12 +57,12 @@ private initUI(): void {
         const maxStars = this.totalLevels * 3;
         this.starsText = new Text({
             text: t('menuStars', { current: this.currentStarsCount, total: maxStars }),
-            style: { 
-                fontFamily: currentLocale.styles.fontFamily, 
-                fontSize: currentLocale.styles.uiFontSize, 
+            style: {
+                fontFamily: currentLocale.styles.fontFamily,
+                fontSize: currentLocale.styles.uiFontSize,
                 fill: '#ffd700', // Золотой цвет
-                fontWeight: 'bold' 
-            }
+                fontWeight: 'bold',
+            },
         });
         this.uiContainer.addChild(this.starsText);
     }
@@ -99,7 +99,7 @@ private initUI(): void {
         this.eventMode = 'static';
     }
 
-    private onPointerDown(event: any): void {
+    private onPointerDown(event: FederatedPointerEvent): void {
         gsap.killTweensOf(this.scrollContainer);
         this.isDragging = true;
         this.scrollContainer.cursor = 'grabbing';
@@ -109,7 +109,7 @@ private initUI(): void {
         this.velocityY = 0;
     }
 
-    private onPointerMove(event: any): void {
+    private onPointerMove(event: FederatedPointerEvent): void {
         if (!this.isDragging) return;
         const currentY = event.global.y;
         const deltaY = currentY - this.pointerStartY;
@@ -117,8 +117,10 @@ private initUI(): void {
         this.lastPointerY = currentY;
 
         let targetY = this.containerStartY + deltaY;
-        if (targetY > this.maxScrollY) targetY = this.maxScrollY + (targetY - this.maxScrollY) * 0.3;
-        else if (targetY < this.minScrollY) targetY = this.minScrollY + (targetY - this.minScrollY) * 0.3;
+        if (targetY > this.maxScrollY)
+            targetY = this.maxScrollY + (targetY - this.maxScrollY) * 0.3;
+        else if (targetY < this.minScrollY)
+            targetY = this.minScrollY + (targetY - this.minScrollY) * 0.3;
 
         this.scrollContainer.y = targetY;
     }
@@ -132,9 +134,9 @@ private initUI(): void {
         if (targetY > this.maxScrollY) targetY = this.maxScrollY;
         else if (targetY < this.minScrollY) targetY = this.minScrollY;
 
-        gsap.to(this.scrollContainer, { y: targetY, duration: 0.5, ease: "power2.out" });
+        gsap.to(this.scrollContainer, { y: targetY, duration: 0.5, ease: 'power2.out' });
     }
-public resize(width: number, height: number): void {
+    public resize(width: number, height: number): void {
         const padding = 20;
         const gap = 20;
 
@@ -151,7 +153,8 @@ public resize(width: number, height: number): void {
         // -------------------------------------------------------------
 
         // Маска теперь корректно закрывает область под динамическим хедером
-        this.scrollMask.clear()
+        this.scrollMask
+            .clear()
             .rect(0, this.headerHeight, width, height - this.headerHeight)
             .fill({ color: 0xffffff });
 
@@ -164,7 +167,7 @@ public resize(width: number, height: number): void {
 
         const gridWidth = columns * targetTileSize + (columns - 1) * gap;
         const startX = (width - gridWidth) / 2;
-        
+
         // Теперь startY вычисляется от правильного headerHeight
         const startY = this.headerHeight + padding;
 
@@ -185,13 +188,13 @@ public resize(width: number, height: number): void {
 
         // --- ИСПРАВЛЕНИЕ 2: Корректировка зоны скролла ---
         const contentHeight = maxButtonY + padding;
-        
+
         // Зона, реагирующая на тач, должна начинаться под хедером
         this.scrollContainer.hitArea = new Rectangle(0, this.headerHeight, width, contentHeight);
 
-        this.maxScrollY = 0; 
+        this.maxScrollY = 0;
         const visibleHeight = height - this.headerHeight;
-        
+
         if (contentHeight - this.headerHeight > visibleHeight) {
             this.minScrollY = -(contentHeight - this.headerHeight - visibleHeight);
         } else {

@@ -7,7 +7,7 @@ export class SceneManager {
 
     public static init(app: Application): void {
         this.app = app;
-        
+
         // Подписываемся на ресайз от Pixi v8
         this.app.renderer.on('resize', () => {
             this.resize(this.app.screen.width, this.app.screen.height);
@@ -22,7 +22,7 @@ export class SceneManager {
 
         this.currentScene = newScene;
         this.app.stage.addChild(newScene);
-        
+
         // Сразу вызываем ресайз для новой сцены под текущий экран
         this.resize(this.app.screen.width, this.app.screen.height);
     }
